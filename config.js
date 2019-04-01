@@ -31,16 +31,11 @@ app.get('/registrarse', (req, res) =>{
 	res.render('registrarse');
 });
 
-app.post('/registrarse', (req, res) =>{
-	res.render("registrarse");
-	crud.crear(req.body);
-});
-
 app.get('/ingresar', (req, res) =>{
 	res.render('ingresar' );
 });
 
-app.post('/ingresar', (req, res) =>{		
+app.post('/ingresar', (req, res) =>{
 	let verificar = require('./validarAccesos');
 	let validarUsuario = verificar.existeUsuario(req.body);
 
@@ -51,7 +46,7 @@ app.post('/ingresar', (req, res) =>{
 			req.session.datosPersona = validarUsuario.datosUsuario;
 			req.session.succes = true;
 			res.redirect('dashboard');
-		} 
+		}
 	} else{
 			req.session.succes = false;
 			res.render('ingresar');
@@ -61,7 +56,7 @@ app.post('/ingresar', (req, res) =>{
 app.get('/dashboard', (req,res) => {
 	if(req.session.succes){
 		res.render('dashboard', {
-			success: req.session.succes, 
+			success: req.session.succes,
 			'datos': req.session.datosPersona,
 			});
 	} else{
@@ -69,10 +64,10 @@ app.get('/dashboard', (req,res) => {
 	}
 })
 
-app.get('/dashboard/mis-cursos', (req,res) => {	
+app.get('/dashboard/mis-cursos', (req,res) => {
 	if(req.session.succes && req.session.datosPersona.rol === 'aspirante'){
 		res.render('mis-cursos', {
-		success: req.session.succes, 
+		success: req.session.succes,
 		'datos': req.session.datosPersona
 		})
 	} else{
@@ -85,12 +80,23 @@ app.get('/dashboard/todos-los-cursos', (req, res ) => {
 	let listadoDeCursos = require('./dataBase/lista-de-cursos.json');
 	if(req.session.succes && req.session.datosPersona.rol === 'aspirante'){
 		res.render('todos-los-cursos',{
-			success: req.session.succes, 
+			success: req.session.succes,
 			'datos': req.session.datosPersona,
 			'listadoCursos' : listadoDeCursos
 			})
 	} else{
 		// res.send('no tiene permiso');
+		res.redirect('../ingresar');
+	}
+})
+
+app.get('/dashboard/crear-curso/', (req, res) => {
+	if(req.session.succes && req.session.datosPersona.rol === 'coordinador'){
+		res.render('crear-curso',{
+			success: req.session.succes,
+			'datos': req.session.datosPersona
+			})
+	} else{
 		res.redirect('../ingresar');
 	}
 })
@@ -105,7 +111,7 @@ app.get('/salir', ( req, res ) => {
 
 app.get('/', (req, res) => {
 	res.render('index', {
-		success: req.session.succes, 
+		success: req.session.succes,
 		'datos': req.session.datosPersona,
 		});
 });
