@@ -31,6 +31,11 @@ app.get('/registrarse', (req, res) =>{
 	res.render('registrarse');
 });
 
+app.post('/registrarse', (req, res) =>{
+	res.render("registrarse");
+	crud.crear(req.body);
+});
+
 app.get('/ingresar', (req, res) =>{
 	res.render('ingresar' );
 });
