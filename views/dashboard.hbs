@@ -1,0 +1,12 @@
+{{>header}}
+
+{{#Rol datos.rol value="coordinador"}}
+    <form>
+        <label>Formulario del coordinador</label>
+    </form>
+    {{else}}
+    <form>
+        <label>Formulario del aspirante</label>
+    </form>
+{{/Rol}}
+{{>footer}}
