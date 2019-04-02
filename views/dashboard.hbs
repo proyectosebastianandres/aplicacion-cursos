@@ -5,8 +5,14 @@
         <label>Formulario del coordinador</label>
     </form>
     {{else}}
-    <form>
-        <label>Formulario del aspirante</label>
-    </form>
+    <section id="cursosAbiertos" class="container-fluid text-center">
+        <h1>Cursos Inscritos</h1>
+        <ul class="row">
+
+         {{#each cursosInscrito}} 
+          {{> cursosIndividuales}}
+         {{/each}}         
+        </ul>
+        </section>
 {{/Rol}}
 {{>footer}}

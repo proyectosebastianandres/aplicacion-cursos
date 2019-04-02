@@ -4,9 +4,11 @@ const path = require('path');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const hbs = require('hbs');
-const crud = require('./crud');
+const registrarUsuario = require('./registrarUsuario');
 const expressSession = require('express-session');
+const listadoDeCursos = require('./dataBase/lista-de-cursos.json');
 require('./helpers');
+
 
 const directorioPublico = path.join(__dirname, '/public');
 app.use(express.static(directorioPublico));
@@ -33,7 +35,7 @@ app.get('/registrarse', (req, res) =>{
 
 app.post('/registrarse', (req, res) =>{
 	res.render("registrarse");
-	crud.crear(req.body);
+	registrarUsuario.crear(req.body);
 });
 
 app.get('/ingresar', (req, res) =>{
@@ -60,29 +62,53 @@ app.post('/ingresar', (req, res) =>{
 
 app.get('/dashboard', (req,res) => {
 	if(req.session.succes){
+		req.session.cursosInscrito = []
+		let listadoIdCurso = req.session.datosPersona.cursosRegistrados;
+		listadoIdCurso.map( (value) => {
+			listadoDeCursos.find( curso => {
+				if(value == curso.id) {
+					req.session.cursosInscrito.push(curso);
+				}
+			})
+		});
+
 		res.render('dashboard', {
 			success: req.session.succes, 
 			'datos': req.session.datosPersona,
+			'cursosInscrito' : req.session.cursosInscrito
 			});
 	} else{
 		res.redirect('ingresar');
 	}
 })
 
+app.post('/dashboard', (req,res) => {
+	console.log(req.session.cursosInscrito);
+	if(req.session.succes){
+	let registrarCursoAlUsuario = require('./inscribirseAunCurso');
+	registrarCursoAlUsuario.inscribirseAunCurso(req.body.idCurso, req.body.identidad);
+	res.render('dashboard', {
+		success: req.session.succes, 
+		'datos': req.session.datosPersona,
+		'cursosInscrito' : req.session.cursosInscrito
+		});
+	} else {
+		res.redirect('ingresar');
+	}	
+})
+
 app.get('/dashboard/mis-cursos', (req,res) => {	
 	if(req.session.succes && req.session.datosPersona.rol === 'aspirante'){
 		res.render('mis-cursos', {
 		success: req.session.succes, 
-		'datos': req.session.datosPersona
+		'datos': req.session.datosPersona,
 		})
 	} else{
-		// res.send('no tiene permiso');
 		res.redirect('../ingresar');
 	}
 });
 
 app.get('/dashboard/todos-los-cursos', (req, res ) => {
-	let listadoDeCursos = require('./dataBase/lista-de-cursos.json');
 	if(req.session.succes && req.session.datosPersona.rol === 'aspirante'){
 		res.render('todos-los-cursos',{
 			success: req.session.succes, 
@@ -90,17 +116,14 @@ app.get('/dashboard/todos-los-cursos', (req, res ) => {
 			'listadoCursos' : listadoDeCursos
 			})
 	} else{
-		// res.send('no tiene permiso');
 		res.redirect('../ingresar');
 	}
 })
 
 app.get('/salir', ( req, res ) => {
-	if(req.session.succes){
-		req.session.datosPersona = undefined;
-		req.session.succes = false;
-		res.redirect('ingresar');
-	}
+	req.session.datosPersona = undefined;
+	req.session.succes = false;
+	res.redirect('/ingresar');
 })
 
 app.get('/', (req, res) => {
@@ -110,14 +133,12 @@ app.get('/', (req, res) => {
 		});
 });
 
-// Rutas 404
 app.get('*', (req, res) => {
 	res.send('Página no existe');
 });
 
 
 const PORT = 3000;
-// Llamado al servidor
 app.listen(PORT, function () {
 	console.log(`Servidor iniciado en el puerto ${PORT}`);
 });
