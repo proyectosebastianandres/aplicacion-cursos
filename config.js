@@ -6,7 +6,8 @@ const bodyParser = require('body-parser');
 const hbs = require('hbs');
 const registrarUsuario = require('./registrarUsuario');
 const expressSession = require('express-session');
-const listadoDeCursos = require('./dataBase/lista-de-cursos.json');
+const listadoDeCursos = require('./dataBase/lista-de-cursos');
+const fs= require('fs');
 require('./helpers');
 
 
@@ -62,7 +63,7 @@ app.post('/ingresar', (req, res) =>{
 
 app.get('/dashboard', (req,res) => {
 	if(req.session.succes){
-		req.session.cursosInscrito = []
+		req.session.cursosInscrito = [];
 		let listadoIdCurso = req.session.datosPersona.cursosRegistrados;
 		listadoIdCurso.map( (value) => {
 			listadoDeCursos.find( curso => {
@@ -82,19 +83,36 @@ app.get('/dashboard', (req,res) => {
 	}
 })
 
-app.post('/dashboard', (req,res) => {
-	console.log(req.session.cursosInscrito);
+app.post('/dashboard', (req,res) => {	
 	if(req.session.succes){
 	let registrarCursoAlUsuario = require('./inscribirseAunCurso');
 	registrarCursoAlUsuario.inscribirseAunCurso(req.body.idCurso, req.body.identidad);
-	res.render('dashboard', {
-		success: req.session.succes, 
-		'datos': req.session.datosPersona,
-		'cursosInscrito' : req.session.cursosInscrito
+	
+	let baseUsuarios = require('./dataBase/usuariosRegistrados');
+	let traerDatosUsuario = baseUsuarios.find( datos => {
+		return (datos.identidad == req.session.datosPersona.identidad);
+	})
+
+	req.session.datosPersona = traerDatosUsuario;
+
+	req.session.cursosInscrito = []
+		let listadoIdCurso = req.session.datosPersona.cursosRegistrados;
+		listadoIdCurso.map( (value) => {
+			listadoDeCursos.find( curso => {
+				if(value == curso.id) {
+					req.session.cursosInscrito.push(curso);
+				}
+			})
 		});
-	} else {
+
+		res.render('dashboard', {
+			success: req.session.succes, 
+			'datos': req.session.datosPersona,
+			'cursosInscrito' : req.session.cursosInscrito
+			});
+	} else{
 		res.redirect('ingresar');
-	}	
+	}
 })
 
 app.get('/dashboard/mis-cursos', (req,res) => {	

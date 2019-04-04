@@ -1,14 +1,5 @@
 const hbs = require('hbs');
 
-hbs.registerHelper('cursoInscrito', function (conditional, options) {
-  conditional.map( (value, indice) => {
-    if(parseFloat(value) == options.hash.value){
-        options.fn()
-    }
-    }) 
-});
-
-
 hbs.registerHelper('cursoDisponible', function (conditional, options) {
 
   if (options.hash.value === conditional) {
