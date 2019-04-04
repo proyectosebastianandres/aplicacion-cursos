@@ -10,7 +10,9 @@
         <ul class="row">
 
          {{#each cursosInscrito}} 
-          {{> cursosIndividuales}}
+          {{> cancelarCursos}}
+            {{else}}
+            <p>No estás registrado a ningún curso todavía</p>
          {{/each}}         
         </ul>
         </section>

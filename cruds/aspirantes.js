@@ -1,6 +1,20 @@
+const listadoDeCursos = require('../dataBase/lista-de-cursos');
 const fs= require('fs');
+let listado = require('../dataBase/usuariosRegistrados.json');
 
-let listado = require('./dataBase/usuariosRegistrados.json');
+function mostrarCursoInscritos (reqCurso, reqDatos) {
+    reqCurso = [];
+    let listadoIdCurso = reqDatos;
+    listadoIdCurso.map( (value) => {
+        listadoDeCursos.find( curso => {
+            if(value == curso.id) {
+                reqCurso.push(curso);
+            }
+        })
+    });
+
+    return reqCurso;
+}
 
 function inscribirseAunCurso (datoCurso, idEstudiante) {
     let cursoExiste = false;
@@ -32,7 +46,7 @@ const guardar = () => {
     })
 }
 
-
 module.exports = {
+    mostrarCursoInscritos : mostrarCursoInscritos,
     inscribirseAunCurso : inscribirseAunCurso
 }

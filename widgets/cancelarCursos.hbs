@@ -1,25 +1,5 @@
-{{>header}}
-
-<div class="container-fluid">
-
-  <div id="imgBanner">
-      <h2> HBS | Imagen destacada/Solo por apariencia</h2>
-  </div>
-
- <div class="cointaner titulosSeccion">
-   <div class="row">
-     <div class="col-md-12">
-        <h2 class="text-center">Cursos que se ofrecen</h2>
-     </div>
-   </div>
- </div>
-
-<section id="cursosAbiertos" class="container-fluid text-center">
-      <ul class="row">
-       {{#each listadoCursos}}
-        {{#cursoDisponible this.estado value="disponible"}}
-      <li class="col-md-3">
-        <div class="informacionCurso">
+<li class="col-md-3">
+          <div class="informacionCurso">
           <figcaption>
               <figure>
                   <img src="/img/programas/IconoBase.png">
@@ -29,6 +9,7 @@
               <h3>{{this.nombre}}</h3>
               <p>Costo: <span>${{this.costo}}</span></p>
               <p> Modalidad: <span>{{this.modalidad}}</span></p>
+              <p>Duración : <span>{{this.duracion}}</span></p>
               <button type="button" class="btn btn-primary" data-toggle="modal" data-target='#{{this.id}}'>Mas información</button>
               <div class="modal fade" id='{{this.id}}' tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                       <div class="modal-dialog" role="document">
@@ -48,26 +29,16 @@
                               <p class="descripcionCurso">{{this.descripcion}}</p>
                             </div>
                           </div>
-                          <div class="modal-footer">
-                            {{#if @root.success}}
+                        <div class="modal-footer">
                             <form  name="{{this.id}}" action="/dashboard" method="POST">
-                            <input type="text" name="idCurso" value="{{this.id}}">
-                            <input type="text" name="identidad" value="{{@root.datos.identidad}}">
-                            <button id="btn_inscripcion" type="submit">Inscribirme</button>
+                            <input type="text" name="cancelar_idCurso" value="{{this.id}}">
+                            <input type="text" name="cancelar_identidad" value="{{@root.datos.identidad}}">
+                            <button id="btn_inscripcion" type="submit">Cancelar Curso</button>
                             </form>
-                            {{/if}}
-                          </div>
+                        </div>
                         </div>
                       </div>
                     </div>
             </div>
         </div>
       </li>  
-      {{/cursoDisponible}}
-    {{/each}}
-      </ul>
-</section>
-
-</div>   
-
-{{>footer}}
