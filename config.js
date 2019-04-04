@@ -96,23 +96,19 @@ app.get('/dashboard', (req,res) => {
 app.post('/dashboard', (req,res) => {	
 	if(req.session.succes){
     crudsAspirante.inscribirseAunCurso(req.body.idCurso, req.body.identidad);
-
-    console.log('inscribir ', req.body.idCurso);
-    console.log('inscribir ', req.body.identidad);
     
     //Traer los ultimos cambios en la base de datos de los usuarios
     let baseUsuarios = require('./dataBase/usuariosRegistrados');
     let traerDatosUsuario = baseUsuarios.find( datos => {
       return (datos.identidad == req.session.datosPersona.identidad);
     })
+    
+    //Cancelar un curso
+    crudsAspirante.eliminarCurso(req.body.cancelar_idCurso, req.body.cancelar_identidad);
 
     //Mostrar cursos inscrito
     req.session.datosPersona = traerDatosUsuario;
     let cursosInscrito= crudsAspirante.mostrarCursoInscritos(req.session.cursosInscrito, req.session.datosPersona.cursosRegistrados);
-
-    //Cancelar un curso
-    console.log('cancelar ', req.body.cancelar_idCurso);
-    console.log('cancelar ', req.body.cancelar_identidad);
 
     res.render('dashboard', {
       success: req.session.succes, 

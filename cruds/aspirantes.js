@@ -16,6 +16,29 @@ function mostrarCursoInscritos (reqCurso, reqDatos) {
     return reqCurso;
 }
 
+function eliminarCurso (idCurso, IdAspirante) {
+    let listaCursos = [];
+    listado.find( usuario => {
+            if(usuario.identidad === IdAspirante){
+                usuario.cursosRegistrados.filter( id => {
+                    if(id != idCurso){
+                        listaCursos.push(id);
+                    }
+                })
+            }
+    }) 
+    
+    listado.find( (usuario) => {
+        if(usuario.identidad === IdAspirante) {
+            usuario.cursosRegistrados = listaCursos;
+            guardar(); 
+        }   
+    })
+
+
+
+}
+
 function inscribirseAunCurso (datoCurso, idEstudiante) {
     let cursoExiste = false;
     listado.find( (persona) => {
@@ -39,6 +62,8 @@ function inscribirseAunCurso (datoCurso, idEstudiante) {
 
 const guardar = () => {
     let datos = JSON.stringify(listado);
+    console.log("enviados desde cancelar ", datos);
+
 
     fs.writeFile('./dataBase/usuariosRegistrados.json', datos, (err) =>{
         if(err) throw err;
@@ -48,5 +73,6 @@ const guardar = () => {
 
 module.exports = {
     mostrarCursoInscritos : mostrarCursoInscritos,
-    inscribirseAunCurso : inscribirseAunCurso
+    inscribirseAunCurso : inscribirseAunCurso,
+    eliminarCurso: eliminarCurso
 }
