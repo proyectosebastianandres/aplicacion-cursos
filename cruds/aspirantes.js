@@ -34,9 +34,6 @@ function eliminarCurso (idCurso, IdAspirante) {
             guardar(); 
         }   
     })
-
-
-
 }
 
 function inscribirseAunCurso (datoCurso, idEstudiante) {
@@ -61,11 +58,9 @@ function inscribirseAunCurso (datoCurso, idEstudiante) {
 }
 
 const guardar = () => {
-    let datos = JSON.stringify(listado);
-    console.log("enviados desde cancelar ", datos);
+    let datos = JSON.stringify(listado, null, 2);
 
-
-    fs.writeFile('./dataBase/usuariosRegistrados.json', datos, (err) =>{
+    fs.writeFile('./database/usuariosRegistrados.json', datos, (err) =>{
         if(err) throw err;
         console.log('Datos almacenados correctamente');
     })

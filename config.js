@@ -4,7 +4,7 @@ const path = require('path');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const hbs = require('hbs');
-const registrarUsuario = require('./registrarUsuario');
+const registrarUsuario = require('./dataBase/registrarUsuario');
 const expressSession = require('express-session');
 const listadoDeCursos = require('./dataBase/lista-de-cursos');
 const fs= require('fs');
@@ -36,11 +36,6 @@ app.get('/registrarse', (req, res) =>{
 	res.render('registrarse');
 });
 
-app.post('/registrarse', (req, res) =>{
-	res.render("registrarse");
-	registrarUsuario.crear(req.body);
-});
-
 app.get('/ingresar', (req, res) =>{
 	res.render('ingresar',{
 		success: req.session.succes, 
@@ -48,23 +43,24 @@ app.get('/ingresar', (req, res) =>{
 	});
 });
 
+app.post('/registrarse', (req, res) =>{
+	registrarUsuario.crearRegistro(req.body);	
+	res.render("registrarse");
+});
+
 app.post('/ingresar', (req, res) =>{		
 	let verificar = require('./validarAccesos');
 	let validarUsuario = verificar.existeUsuario(req.body);
-
-	if(validarUsuario.usuarioExiste){
-		req.session.datosPersona = validarUsuario.datosUsuario;
-		req.session.succes = true;
 
 		if(validarUsuario.usuarioExiste){
 			req.session.datosPersona = validarUsuario.datosUsuario;
 			req.session.succes = true;
 			res.redirect('dashboard');
-		} 
-	} else{
+		} else {
 			req.session.succes = false;
 			res.render('ingresar');
-	}
+		}
+
 });
 
 app.get('/dashboard/todos-los-cursos', (req, res ) => {
@@ -82,15 +78,22 @@ app.get('/dashboard/todos-los-cursos', (req, res ) => {
 // Dashboard para todos los roles
 app.get('/dashboard', (req,res) => {
 	if(req.session.succes){
-		let cursosInscrito= crudsAspirante.mostrarCursoInscritos(req.session.cursosInscrito, req.session.datosPersona.cursosRegistrados);
-		res.render('dashboard', {
-			success: req.session.succes, 
-			'datos': req.session.datosPersona,
-			'cursosInscrito' : cursosInscrito
+		if(req.session.succes && req.session.datosPersona.rol === 'aspirante'){
+			let cursosInscrito= crudsAspirante.mostrarCursoInscritos(req.session.cursosInscrito, req.session.datosPersona.cursosRegistrados);
+			res.render('dashboard', {
+				success: req.session.succes, 
+				'datos': req.session.datosPersona,
+				'cursosInscrito' : cursosInscrito
+				});
+		} else if(req.session.succes && req.session.datosPersona.rol === 'coordinador'){
+			res.render('dashboard', {
+				success: req.session.succes, 
+				'datos': req.session.datosPersona,
 			});
-	} else{
-		res.redirect('ingresar');
-	}
+		} else {
+			res.redirect('ingresar');
+		}
+	}	
 })
 
 app.post('/dashboard', (req,res) => {	

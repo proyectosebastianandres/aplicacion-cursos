@@ -6,21 +6,47 @@
 
 /************* Menu *******************/
 
+ul li,
+ul li a {
+    text-decoration: none !important;
+}
+
+.navbar ul {
+    width: 35%;
+    text-align: center;
+}
+
+.enlaces{
+    width: 33.33%;
+    font-weight: 700;
+}
+
+.navbar-fixed-top{
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 99;
+    height: 100px;
+}
+
+.navbar-brand img {
+    width: 30%;
+    height: auto;
+}
+
 #btn_registrarse{
     background-color:#2f2f2f;
     border-radius: 25px;
     color: #ffffff
 }
 
+
 #btn_registrarse a{
     color: #ffffff
 }
-
-#btn_ingresar a{
-    color: #2f2f2f;   
+.enlaces a{
+    color: #2f2f2f;       
 }
-
-/**************** aspirante | coordinador *******************/
 
 .enlacesNav{
     color: #066732 !important;
@@ -41,17 +67,31 @@
     color: #8cb22f !important;
 }
 
-/************ inicio *******************/
+/*************** general paginas *************/
 
 #imgBanner{
     width: 100%;
-    height: 200px;
     background-color: blue;
+    position: relative;
+}
+
+#imgBanner img {
+    width: 100%;
+    height: auto;
 }
 
 .titulosSeccion h2{
-    padding: 1em;
+    padding: 120px 0 30px 0;
+    font-weight: 800;
+    font-size: 48px;
 }
+
+.containerTop{
+    margin-top: 100px;
+    padding: 0;
+    overflow: hidden;
+}
+
 
 /************* programas ****************/
 
@@ -79,7 +119,6 @@
     position: relative;
 }
 
-#btn_inscripcion,
 .btn-primary{
     width: 100%;
     height: 50px;
@@ -91,6 +130,26 @@
     position: absolute;
     left: 0;
     bottom: 0;
+    border-radius: 0;
+    transition: all 0.2s ease-in;
+}
+
+::selection {
+    color: #ffffff;
+    background-color: #99cc33;
+}
+
+.modal-header .close:hover,
+.btn-primary:hover{
+    background-color: #006633;
+}
+
+.btn-cancelar{
+    background-color: #db4437;
+}
+
+.btn-cancelar:hover{
+    background-color: #b2352f;
 }
 
 .modal-header .close{
@@ -100,6 +159,7 @@
     height: 50px;
     line-height: 0;
     color: #ffffff;
+    transition: all 0.2s ease-in;
 }
 
 .datosdelCurso > p span,
@@ -123,9 +183,20 @@
 
 /************* formularios ************/
 
-.formularios{
-    background-color: red;
+.colorPaginaFormularios{
+    background-color: #1DB954;
+}
+
+.contFormularios{
     width: 40%;
+    margin: auto;
+    background: #ffffff;    
+    margin-top: 2em;
+    margin-bottom: 2em;
+}
+
+.formularios{
+    width: 100%;
     margin: auto;
     text-align: center;
     padding: 2em 0;
@@ -137,11 +208,11 @@
 }
 
 .formulariosIntroduccion{
-    margin-top: 3em;
+    margin-top: 2em;
 }
 
 .formulariosIntroduccion p{
-    width: 70%;
+    width: 90%;
     display: block;
     margin: auto;
 }

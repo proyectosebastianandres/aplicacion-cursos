@@ -1,12 +1,12 @@
 {{>header}}
 
-<div class="container-fluid">
+<div class="container-fluid containerTop">
 
   <div id="imgBanner">
-      <h2> HBS | Imagen destacada/Solo por apariencia</h2>
+     <img src="/img/bannerCursos.jpg" alt="Cursos tdea" />
   </div>
 
- <div class="cointaner titulosSeccion">
+ <div id="cursos" class="cointaner titulosSeccion">
    <div class="row">
      <div class="col-md-12">
         <h2 class="text-center">Cursos que se ofrecen</h2>
@@ -51,9 +51,9 @@
                           <div class="modal-footer">
                             {{#if @root.success}}
                             <form  name="{{this.id}}" action="/dashboard" method="POST">
-                            <input type="text" name="idCurso" value="{{this.id}}">
-                            <input type="text" name="identidad" value="{{@root.datos.identidad}}">
-                            <button id="btn_inscripcion" type="submit">Inscribirme</button>
+                            <input type="hidden" name="idCurso" value="{{this.id}}">
+                            <input type="hidden" name="identidad" value="{{@root.datos.identidad}}">
+                            <button class="btn-primary" type="submit">Inscribirme</button>
                             </form>
                             {{/if}}
                           </div>

@@ -34,7 +34,7 @@ function crearRegistro (datosEstudiante) {
 
 const listar = () => {
     try{
-        listado = require('./dataBase/usuariosRegistrados.json');
+        listado = require('./usuariosRegistrados.json');
     } catch (err) {
         let datos = {
             identidad : '123456789',
@@ -50,14 +50,14 @@ const listar = () => {
 };
 
 const guardar = () => {
-    let datos = JSON.stringify(listado);
+    let datos = JSON.stringify(listado, null, 2);
 
-    fs.writeFile('./dataBase/usuariosRegistrados.json', datos, (err) =>{
+    fs.writeFile('./database/usuariosRegistrados.json', datos, (err) =>{
         if(err) throw err;
         console.log('Datos almacenados correctamente');
     })
 }
 
 module.exports = {
-    crear: crearRegistro
+    crearRegistro: crearRegistro
 }

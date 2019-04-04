@@ -2,7 +2,7 @@ let baseusuarios = require('./dataBase/usuariosRegistrados');
 
 function existeUsuario (datosUsuario) {
     let datosSesion = {};
-    baseusuarios.map( (usuario,index) => {
+    baseusuarios.map( (usuario) => {
         if((datosUsuario.correo == usuario.correo) && (datosUsuario.contrasena == usuario.contrasena)){
             datosSesion = {
                 datosUsuario: {
